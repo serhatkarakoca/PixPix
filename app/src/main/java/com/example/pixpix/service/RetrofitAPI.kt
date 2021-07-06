@@ -13,7 +13,8 @@ interface RetrofitAPI {
         @Query("key") key: String = API_KEY,
         @Query("page") page: Int,
         @Query("per_page") perPage: Int,
-        @Query("q") query:String
+        @Query("q") query:String?,
+        @Query("safesearch")safeSearch:Boolean = true
     ): Response<ImageResponse>
 
 }

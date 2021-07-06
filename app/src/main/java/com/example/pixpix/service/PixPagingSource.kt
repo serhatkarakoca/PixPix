@@ -11,13 +11,16 @@ import javax.inject.Inject
 
 class PixPagingSource(
     private val retrofitAPI: RetrofitAPI,
-    private var query:String
+    private var query:String?
 ) : PagingSource<Int, ImageModel>() {
 
 
 
     override fun getRefreshKey(state: PagingState<Int, ImageModel>): Int? {
-        return state.anchorPosition
+        return state.anchorPosition?.let { anchorPosition ->
+            val anchorPage = state.closestPageToPosition(anchorPosition)
+            anchorPage?.prevKey?.plus(1) ?: anchorPage?.nextKey?.minus(1)
+        }
     }
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, ImageModel> {
