@@ -12,7 +12,8 @@ interface RetrofitAPI {
     suspend fun getImages(
         @Query("key") key: String = API_KEY,
         @Query("page") page: Int,
-        @Query("per_page") perPage: Int
+        @Query("per_page") perPage: Int,
+        @Query("q") query:String
     ): Response<ImageResponse>
 
 }

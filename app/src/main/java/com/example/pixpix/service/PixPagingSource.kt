@@ -3,12 +3,19 @@ package com.example.pixpix.service
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.pixpix.model.ImageModel
+import dagger.hilt.android.AndroidEntryPoint
 import retrofit2.HttpException
 import java.io.IOException
+import javax.inject.Inject
+
 
 class PixPagingSource(
-    private val retrofitAPI: RetrofitAPI
+    private val retrofitAPI: RetrofitAPI,
+    private var query:String
 ) : PagingSource<Int, ImageModel>() {
+
+
+
     override fun getRefreshKey(state: PagingState<Int, ImageModel>): Int? {
         return state.anchorPosition
     }
@@ -17,7 +24,7 @@ class PixPagingSource(
         val position = params.key ?: FIRST_PAGE_INDEX
         println("page" + position)
         return try {
-            val response = retrofitAPI.getImages(page = position, perPage = params.loadSize)
+            val response = retrofitAPI.getImages(query = query ,page = position, perPage = params.loadSize)
             val photos = response.body()?.hits!!
             LoadResult.Page(
                 data = photos,

@@ -1,5 +1,6 @@
 package com.example.pixpix.viewmodel
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
@@ -13,9 +14,15 @@ import javax.inject.Inject
 @HiltViewModel
 class FeedViewModel @Inject constructor(private val retrofitAPI: RetrofitAPI) : ViewModel() {
 
+    private val queryString = MutableLiveData<String>()
+
     fun getImages() =
         Pager(config = PagingConfig(pageSize = 20, maxSize = 200, enablePlaceholders = false),
-            pagingSourceFactory = { PixPagingSource(retrofitAPI) }).flow.cachedIn(viewModelScope)
+            pagingSourceFactory = { PixPagingSource(retrofitAPI,queryString.value ?: "car") }).flow.cachedIn(viewModelScope)
 
+    fun searchImage(query:String){
+        queryString.value = query
+
+    }
 
 }
